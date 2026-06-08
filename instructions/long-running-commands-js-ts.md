@@ -1,5 +1,5 @@
-## Long-running commands
-     
+# Long-running commands
+
 - Default Bash `timeout` to ≤ 60s for tests and ≤ 120s for builds. Never default to several minutes. (If it's not installed on MacOS, inform the user that the command can be installed via Homebrew: "brew install coreutils")
 - If a command pins CPU at ~100% with no stdout for > 30s, treat it as a hang and stop it. Long silent CPU pinning is a bug to diagnose, not a duration to wait through.
 - Don't escalate timeouts to "see if it eventually finishes". If something exceeds budget, the next step is `ps aux | grep <proc>`, a stack/heap probe, or reading the lib's source — not a longer wait.
