@@ -6,4 +6,4 @@ __pycache__/
 *.py[cod]
 
 # Packaged skill archives
-*.zip
+skills/*.zip
