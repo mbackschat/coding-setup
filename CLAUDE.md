@@ -4,9 +4,14 @@ Prefer uv instead of pip for python-related work.
 
 Prefer pnpm instead of npm for node-related work.
 
-Don't hard-wrap markdown at a fixed column (72/80). Write one paragraph per line. When an existing file already uses hard wrapping, prefer unwrapping it over preserving the convention — it's almost always vestigial.
+### Markdown documents
 
-Commit messages:
+- Don't hard-wrap markdown at a fixed column (72/80). Write one paragraph per line. When an existing file already uses hard wrapping, prefer unwrapping it over preserving the convention — it's almost always vestigial.
+- When referencing existing other markdown files: always use regular markdown links, so that it becomes easy to open them in a Viewer.
+
+
+### Commit messages
+
 - Conventional Commits — `type(scope): subject`, imperative, lowercase type (feat, fix, docs, refactor, perf, test, build, ci, chore).
 - Subject line only by default. Add 1-2 body sentences only for non-obvious *why*.
 - No bullet lists, no test counts, no restating the diff/plan.
@@ -31,6 +36,8 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 - Minimum code that solves the problem. Nothing speculative.
 - Touch only what you must. Clean up only your own mess.
 - Define success criteria. Loop until verified.
+
+- Clean code is non-negotiable — never knowingly write a code smell, and if you spot one (even pre-existing), stop, report it immediately, and provide the fix.
 
 ## Long-running commands
 
