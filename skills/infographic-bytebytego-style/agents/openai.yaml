@@ -1,0 +1,5 @@
+interface:
+  display_name: "ByteByteGo-Style Infographics"
+  short_description: "Create clear ByteByteGo-inspired tech infographics"
+  brand_color: "#42D3A4"
+  default_prompt: "Use $infographic-bytebytego-style to create a technical infographic explaining how a request travels through an API gateway."
