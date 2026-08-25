@@ -1,9 +1,11 @@
 # Long-running commands
 
-- Default Bash `timeout` to ≤ 60s for tests and ≤ 120s for builds. Never default to several minutes. (If it's not installed on MacOS, inform the user that the command can be installed via Homebrew: "brew install coreutils")
-- If a command pins CPU at ~100% with no stdout for > 30s, treat it as a hang and stop it. Long silent CPU pinning is a bug to diagnose, not a duration to wait through.
-- Don't escalate timeouts to "see if it eventually finishes". If something exceeds budget, the next step is `ps aux | grep <proc>`, a stack/heap probe, or reading the lib's source — not a longer wait.
-- Inside tests/scripts you write, wrap any external library call you don't fully trust in an explicit per-call deadline (`Promise.race` with a small timeout) so a pathological input surfaces as a clear failure with file/line, not a silent process spin.
-- Background tasks: if `TaskOutput`/the output file stays at 0 bytes past the expected duration, abandon it (`kill` the PID, don't `TaskOutput --block`); empty output + live process = hung.
-- A correct algorithm's runtime should be predictable from the input shape. If size of a 10× larger input causes 1000× slowdown, that's a complexity bug — surface it, don't paper over it with size caps.
-
+- Use the agent runner's native timeout, yield and background-session controls. The policy must work in both Codex and Claude Code; do not make shell `timeout` a prerequisite.
+- Budget focused tests at 60 seconds and builds at 120 seconds unless the repository documents a measured exception. Never increase a budget merely to see whether a command eventually finishes.
+- Start commands with a bounded foreground wait. If the runner yields a live task or session, retain its identifier, poll in windows of at most 30 seconds, and always terminate or reap it before abandoning the command.
+- In Codex, use the command yield/session identifier and poll or terminate that session. In Claude Code, use the Bash timeout or background task identifier, inspect it with `TaskOutput`, and stop it with the available task or shell termination control.
+- Shell-level deadlines such as GNU `timeout` or macOS Homebrew `gtimeout` are portable fallbacks for scripts and CI, not the default agent control mechanism.
+- Treat a process as hung when it saturates a logical core for more than 30 seconds without an observable progress signal such as new output, advancing test counts or changing expected artifacts. Diagnose it with process inspection, a stack or heap probe, or the library source instead of extending the deadline.
+- Silence alone is not proof of a hang. Low-CPU waiting and known quiet compiler phases may be legitimate, but they remain subject to the command budget.
+- Inside tests or scripts, put explicit deadlines around untrusted external calls only at the risky boundary. Prefer cancellable APIs such as `AbortSignal`; a bare `Promise.race` reports a timeout but does not stop the underlying work.
+- A correct algorithm's runtime should be predictable from the input shape. If a 10x larger input causes a 1000x slowdown, surface the complexity defect instead of hiding it with a larger timeout or smaller fixture.
