@@ -16,16 +16,21 @@ The user does not need to see or fill this template unless they requested a prom
 ## Template
 
 ```text
-Create an original, polished portrait technical infographic about [SUBJECT], using a clean ByteByteGo-inspired information-design language without copying an existing poster or using the ByteByteGo logo or wordmark.
+Create an original, polished [ORIENTATION] technical infographic about [SUBJECT], using a clean ByteByteGo-inspired information-design language without copying an existing poster or using the ByteByteGo logo or wordmark.
 
 Communication goal:
 - Audience: [AUDIENCE].
 - Ten-second takeaway: [ONE-SENTENCE TAKEAWAY].
 - Exact title: "[TITLE]".
 - Tone: technically precise, compact, approachable, and visually scannable.
+[OPTIONAL SERIES ROLE:
+- Unique teaching goal: [QUESTION THIS POSTER ALONE ANSWERS].
+- Context-only repeated entities: [LIST].
+- Zoom source: [PARENT POSTER OR COMPONENT PATH].
+]
 
 Canvas and header:
-- [ASPECT RATIO] portrait composition at high resolution.
+- [ASPECT RATIO] [ORIENTATION] composition at high resolution.
 - [LIGHT: very light warm-gray background / DARK: charcoal background].
 - Large bold sans-serif title at the top left.
 - Short mint-green vertical bar immediately left of the title.
@@ -39,6 +44,7 @@ Primary information structure:
 - Major regions in reading order: [EXACT REGION LIST].
 - Final output or conclusion: [DESCRIPTION].
 - Secondary microdiagrams may appear only inside [NAMED REGIONS].
+- [OPTIONAL SERIES: Keep [REPEATED ENTITIES] in compact context rails or groups; they must remain visibly subordinate to [OWNED MECHANISM].]
 
 Exact content:
 - Use these labels exactly as written.
@@ -121,6 +127,26 @@ Use only one primary insert. Rewrite its generic labels into subject-specific di
 - Converge only where processing is truly shared and end with one explicit output or selected result.
 ```
 
+### Landscape branching architecture
+
+```text
+- Use three to five aligned left-to-right columns for inputs, contract or decision point, execution paths, and backends or outputs.
+- Make the shared contract the strongest focal node.
+- Keep alternative paths in aligned lanes and make any shared state converge on one canonical node.
+- Use one shallow full-width footer for evidence, guarantees, or tradeoffs aligned with the paths above.
+- Put optional or future extensions in a small dashed group outside the primary route.
+```
+
+### Landscape zoom-in lifecycle
+
+```text
+- Add one compact breadcrumb naming the parent context and the component being opened.
+- Give the owned mechanism roughly half or more of the body.
+- Keep repeated callers, publication targets, transports, and downstream services in slim context rails or compact groups.
+- Separate synchronous or local work from asynchronous or external work with distinct lanes.
+- End with the component's consequences, state transitions, comparison, or invariants rather than repeating the parent architecture's conclusion.
+```
+
 ### Split-screen comparison
 
 ```text
@@ -176,6 +202,36 @@ Preserve exactly:
 
 Quality gates:
 - [FAILED GATE TO CORRECT]
+- Re-audit every declared source -> verb -> target relationship after the edit, including unaffected regions; no shifted label, missing branch, false convergence, duplicate edge, or dangling connector.
 - No new text, nodes, arrows, logos, or decorative elements.
 ```
 
+## Optional regeneration record
+
+For an evolving architecture or poster series, keep the record outside the image prompt and separate it into three ownership layers:
+
+```markdown
+### Stable idea and visual design
+
+- Audience question
+- Ten-second takeaway
+- Primary topology and orientation
+- Focal mechanism
+- Context-only repeated entities
+- Durable exclusions
+
+### Current factual input — YYYY-MM-DD
+
+- Source links
+- Exact components, artifacts, relationships, guarantees, and current status
+- Facts that are illustrative, future, or explicitly outside the current architecture
+
+### Generation record
+
+- Compiled prompt
+- Accepted raster and dimensions
+- Generation or edit mode
+- Material QA corrections and refinement prompts
+```
+
+Update the narrowest layer that owns a change. Do not rewrite the stable communication goal merely because current architecture details evolved.

@@ -1,6 +1,6 @@
 ---
 name: infographic-bytebytego-style
-description: Create or revise portrait technical infographics with ByteByteGo-inspired information design, including card catalogs, comparisons, flows, architectures, taxonomies, timelines, and storyboards. Use when the user asks for this infographic style or wants a dense technical subject turned into a clear visual. Do not use for unrelated charts, ordinary diagrams, or copies bearing ByteByteGo branding.
+description: Create or revise technical infographics with ByteByteGo-inspired information design in portrait or landscape formats, including card catalogs, comparisons, flows, architectures, taxonomies, timelines, and storyboards. Use when the user asks for this infographic style or wants a dense technical subject turned into a clear visual. Do not use for unrelated charts, ordinary diagrams, or copies bearing ByteByteGo branding.
 ---
 
 # ByteByteGo-Style Technical Infographics
@@ -24,10 +24,10 @@ Only `subject` is required. Infer useful defaults for everything else unless an 
 | `title` | Optional | Exact headline. Draft a concise headline when absent. |
 | `must_include` | Optional | Required concepts, entities, steps, comparisons, or labels. |
 | `must_exclude` | Optional | Content or visual elements to omit. |
-| `layout` | Optional | `auto`, `cards`, `small-multiples`, `layered`, `swimlane`, `branching`, `split-comparison`, `hub-and-spoke`, `cheatsheet`, or `storyboard`. Default to `auto`. |
+| `layout` | Optional | `auto`, `cards`, `small-multiples`, `layered`, `swimlane`, `branching`, `landscape-branching`, `zoom-lifecycle`, `split-comparison`, `hub-and-spoke`, `cheatsheet`, or `storyboard`. Default to `auto`. |
 | `theme` | Optional | `auto`, `light`, or `dark`. Default to light. Use dark for a cohesive agent, orchestration, or network map when it materially improves the composition. |
 | `brand` | Optional | User-owned label or supplied logo asset. Default to no brand mark. |
-| `aspect_ratio` | Optional | Default to 4:5 portrait. Use a taller canvas only when the information topology requires it. |
+| `aspect_ratio` | Optional | Default to `auto`: prefer 4:5 portrait for vertical catalogs, stacks and storyboards; 3:2 landscape for left-to-right architectures, multi-lane lifecycles and wide comparisons; use 16:9 when the user needs a slide-native composition. Honor an explicit ratio. |
 | `deliverable` | Optional | Final image, prompt only, design brief, critique, or edit. Infer from the user's verb. |
 | `output` | Optional | Requested filename, format, or location. Return the generated image in conversation when unspecified. |
 
@@ -70,12 +70,16 @@ Choose one primary layout based on the reader's main question:
 | How does data move through system layers? | Layered architecture |
 | Who does what, and when? | Swimlane timeline |
 | Which route is selected under each condition? | Branching flow |
+| How do several execution paths relate to one shared contract? | Landscape branching architecture |
+| How does one component work inside a larger system? | Landscape zoom-in lifecycle |
 | How do two alternatives differ? | Split-screen comparison |
 | What does a central coordinator mediate? | Hub-and-spoke map |
 | What are the main views of this broad topic? | Multi-panel cheatsheet |
 | What changes at each fixed stage? | Sequential storyboard |
 
 Use one primary skeleton for at least 70% of the composition. Secondary microdiagrams may appear inside its regions but must not create a competing global reading order.
+
+Choose orientation from that skeleton rather than treating portrait as part of the visual style. Recompose the grid when changing orientation; do not rotate or stretch a portrait layout into landscape. Use landscape when four or more meaningful stages, peers or lanes must remain comparable on one horizontal axis.
 
 Read [the style guide](references/style-guide.md) when creating a composition from scratch, selecting or mixing layouts, or correcting a weak composition. For a narrow edit that preserves layout, consult it only when style consistency is relevant.
 
@@ -91,6 +95,7 @@ Before generating, determine:
 - Canonical label, icon, and color for every repeated entity.
 - Exact node text, edge verbs, and short captions.
 - Which detail can be removed without weakening the takeaway.
+- For a poster series: the unique audience question, concepts owned by this poster, context-only repeated entities, and an optional zoom source.
 
 Prefer structural labels and edge verbs over paragraphs. The final poster must support three reading depths: headline, structure, and detail.
 
@@ -123,10 +128,13 @@ Inspect the result against these gates:
 - No connector crosses text or terminates ambiguously.
 - One layout remains visually dominant.
 - The result contains no unauthorized logo, watermark, or copied composition.
+- After every image edit, re-audit the complete `source -> verb -> target` manifest; layout edits can shift an edge label, drop a branch, or leave a dangling connector outside the edited region.
+- In a series or zoom-in, repeated context remains visually subordinate to the mechanism this poster owns.
 
 If a gate fails, edit the generated image with a focused delta prompt. State what must change and what must remain unchanged. Iterate until the gates pass or a real tool limitation prevents a reliable result.
 
-### 8. Deliver
+### 8. Deliver and record
 
 Return the final image with a concise note naming the chosen layout. Mention inferred content or unresolved technical uncertainty only when it matters to the user's use of the result.
 
+For an evolving architecture or multi-poster series, maintain an optional regeneration record with three layers: stable communication idea and style; dated current factual input; and generation history containing the compiled prompt, accepted raster, dimensions, and material QA refinements. Do not require this record for a one-off infographic.

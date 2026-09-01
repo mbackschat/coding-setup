@@ -10,7 +10,7 @@ This style is not one diagram template. It is a stable visual grammar applied to
 
 The stable grammar is:
 
-- Portrait canvas, usually close to 4:5.
+- Topology-driven canvas: commonly 4:5 portrait, with 3:2 or 16:9 landscape when horizontal comparison, branching, or lifecycle structure requires it.
 - Large, direct headline at the top, normally left aligned.
 - Short mint-green vertical accent bar at the far left of the headline.
 - Optional user-owned brand mark in the opposite top corner.
@@ -31,6 +31,8 @@ The variable grammar is the body layout. Choose it from the subject's relationsh
 | Several variants sharing the same internal mechanism | Comparative small multiples |
 | One system with ordered layers | Layered architecture stack |
 | One process with actors or branches over time | Swimlane or branching flow |
+| One contract feeding several comparable execution paths | Landscape branching architecture |
+| One subsystem opened from a broader architecture | Landscape zoom-in lifecycle |
 | Two alternatives readers must contrast | Split-screen comparison |
 | One hub coordinating many tools or agents | Hub-and-spoke architecture |
 | One topic needing overview plus several deep dives | Multi-panel cheatsheet |
@@ -42,14 +44,17 @@ Choose one primary skeleton for the poster. Secondary diagram types may appear i
 
 Recommended defaults:
 
-- Working master: 2400 × 3000 px.
-- Lightweight social export: 1200 × 1500 px.
+- Portrait working master: 2400 × 3000 px; lightweight export: 1200 × 1500 px.
+- Landscape working master: 3000 × 2000 px; lightweight export: 1536 × 1024 px.
+- Use 4:5 portrait for vertical catalogs, layered stacks and top-to-bottom storyboards.
+- Use 3:2 landscape for four-or-more-stage left-to-right architectures, multi-lane lifecycles, wide comparisons and zoomed subsystem views with context rails.
+- Use 16:9 landscape when the user needs a slide-native asset and the content remains legible at presentation scale.
 - Use a taller 10:13 canvas only when a layered system or long timeline genuinely needs more vertical depth.
 - Keep the outer safe area around 2.5% to 4% of canvas width.
 - Reserve roughly 7% to 11% of canvas height for the title area.
 - Use gutters around 1% to 2% of canvas width between major regions.
 
-The canvas should read as one bounded composition. Avoid placing key nodes against the edge or allowing arrows to terminate ambiguously at the crop.
+Choose orientation after modeling the relationships. Recompose the grid when orientation changes; do not rotate or stretch a portrait arrangement into landscape. The canvas should read as one bounded composition. Avoid placing key nodes against the edge or allowing arrows to terminate ambiguously at the crop.
 
 ## Header system
 
@@ -234,7 +239,7 @@ Use when time, ownership, and handoffs all matter.
 
 - Assign one lane per actor, branch, service, or state.
 - Put lane identities in large cards at the top.
-- Run time vertically for a portrait poster.
+- Run time vertically for portrait. In landscape, run time left to right when several actors or handoffs need aligned lanes.
 - Use colored event circles on lane spines.
 - Connect events with labeled arrows for creation, merge, return, or handoff.
 - Add local annotations beside events instead of a detached legend.
@@ -249,6 +254,28 @@ Use when one input can take multiple paths according to a condition, mode, polic
 - Keep alternatives visually distinct in columns or zones.
 - Converge paths only when they truly share later processing.
 - End with one explicit output or clearly selected result.
+
+### Landscape branching architecture
+
+Use when a shared input or contract fans into several execution paths, backends, deployment targets, or evidence roles that must remain comparable.
+
+- Use three to five aligned columns such as input, contract, execution path, backend, and output.
+- Keep the shared contract or decision point saturated and visually central.
+- Place alternatives in aligned horizontal lanes and make shared state visibly converge on one canonical node.
+- Use a shallow full-width footer for evidence, guarantees, tradeoffs, or another comparison that applies to the paths above.
+- Put optional or future adapters in a small dashed extension group outside the primary route.
+- Do not let the comparison footer become a second global reading order.
+
+### Landscape zoom-in lifecycle
+
+Use for a deep-dive poster that opens one component from a broader architecture while remaining understandable on its own.
+
+- Add a compact breadcrumb naming the source context and the component being opened.
+- Give the owned mechanism roughly half or more of the body and the strongest visual weight.
+- Keep repeated callers, publication targets, transports, or downstream services in slim context rails or compact groups.
+- Preserve component names when owner orientation matters, but keep repeated context below roughly one-third of the body.
+- Separate synchronous/local work from asynchronous or external work with distinct lanes.
+- End with the mechanism's consequences, state transitions, or invariants rather than repeating the parent architecture's conclusion.
 
 ### Split-screen comparison
 
@@ -305,6 +332,8 @@ Valid combinations:
 - A card catalog containing one microdiagram inside each card.
 - A storyboard band containing a mini architecture snapshot for that stage.
 - A layered architecture containing a hub-and-spoke arrangement inside its central system layer.
+- A landscape branching architecture with one aligned evidence-comparison footer.
+- A landscape zoom-in lifecycle with slim context rails and one lower asynchronous lane.
 
 ### Overview plus mechanism plus consequence
 
@@ -360,6 +389,17 @@ Use when every step changes what is present in the system:
 - Prefer labels adjacent to the marks they explain.
 - Do not run arrows across panel boundaries unless the whole poster is explicitly one process.
 
+### Poster series and zoom-ins
+
+For a multi-poster series, assign every poster one audience question and one owned explanation. Record which concepts are unique to it and which repeated components are context only.
+
+- Reuse the same canonical label, icon family, and color for an entity throughout the series.
+- Repeat a component only when standalone comprehension, component-owner orientation, or the local mechanism requires it.
+- Render context-only components smaller, paler, or inside a labeled context rail so they cannot compete with the owned mechanism.
+- Use a short zoom-in breadcrumb when a poster opens a subsystem from another poster.
+- If two posters explain the same arrows or state transition at equal depth, remove or compress one explanation rather than relying on different titles.
+- Preserve historical or evolving factual detail in a regeneration record rather than duplicating it across poster copy.
+
 ## Content architecture
 
 Answer these questions before selecting colors or icons:
@@ -368,12 +408,14 @@ Answer these questions before selecting colors or icons:
 |---|---|
 | What should a reader understand after 10 seconds? | One sentence. |
 | What is the information shape? | Catalog, comparison, sequence, branching flow, layered system, taxonomy, timeline, or hub. |
+| Which orientation fits that shape? | Portrait for vertical progression; landscape for horizontal comparison, branching, or aligned lanes. |
 | What are the 3 to 7 top-level groups? | Named groups only. |
 | What is the primary reading order? | Top-to-bottom, left-to-right, radial, or indexed. |
 | Which entities repeat? | One canonical label, icon, and color for each. |
 | Which relations require arrows? | Write each as `source -> verb -> target`. |
 | What detail can be removed? | Anything that does not support the takeaway. |
 | What is the focal mechanism? | The region with the most space and strongest color. |
+| If this belongs to a series, what does this poster own? | One unique audience question plus a short list of context-only repeated entities. |
 
 Then build copy in three layers:
 
@@ -480,6 +522,42 @@ Matching vertical levels matter more than identical internal structures.
 
 The stage labels define semantic chunks. The numbered route defines temporal order.
 
+### Landscape branching architecture
+
+```text
+┌────────────────────────────────────────────────────────────────┐
+│ ▌ TITLE                                             OPTIONAL BRAND│
+├──────────────┬──────────────┬────────────────┬───────────────────┤
+│ INPUTS       │ CONTRACT     │ EXECUTION PATHS│ BACKENDS / OUTPUTS│
+│ node         │ focal node   │ path A         │ target A          │
+│ node ───────▶│      ├──────▶│ path B ───────▶│ target B          │
+│ node         │      └──────▶│ path C         │ shared state      │
+├──────────────┴──────────────┴────────────────┴───────────────────┤
+│ ALIGNED EVIDENCE, GUARANTEES, OR TRADEOFF COMPARISON            │
+└────────────────────────────────────────────────────────────────┘
+```
+
+Keep the main left-to-right route above the footer. Align each footer item with the path it qualifies.
+
+### Landscape zoom-in lifecycle
+
+```text
+┌────────────────────────────────────────────────────────────────┐
+│ ▌ TITLE                                                        │
+│ ZOOM-IN: PARENT → SUBSYSTEM → OWNED COMPONENT                  │
+├───────────┬──────────────────────────────────────┬─────────────┤
+│ INPUT     │ DOMINANT OWNED MECHANISM             │ OUTPUT      │
+│ CONTEXT ─▶│ state → operation → result           ├────────────▶│
+│ RAIL      │ change / evidence / local feedback   │ CONTEXT RAIL│
+├───────────┴────────────────────────┬─────────────┴─────────────┤
+│ OWNED PLANNING OR STATE TRANSITION │ ASYNC / EXTERNAL CONTEXT  │
+├────────────────────────────────────┴───────────────────────────┤
+│ CONSEQUENCES, COMPARISON, OR INVARIANTS                        │
+└────────────────────────────────────────────────────────────────┘
+```
+
+Make the central mechanism visually dominant. Context rails keep the poster standalone without re-teaching the parent architecture.
+
 ## Light and dark variants
 
 Use the light variant by default. It supports dense explanatory text, large pastel fields, and multiple diagram families.
@@ -511,17 +589,22 @@ Score each criterion from 0 to 2. A production-ready poster should score at leas
 | Text economy | Paragraph-heavy | Some excess | Compact and precise |
 | Color discipline | Decorative or overloaded | Mostly controlled | Semantic and restrained |
 | Icon consistency | Mixed visual families | Small inconsistencies | One coherent icon language |
-| Mobile legibility | Fails when reduced | Main structure survives | Structure and key labels remain readable |
+| Reduced-size legibility | Fails when reduced | Main structure survives | Structure and key labels remain readable |
+
+After any image edit, compare the complete relationship manifest with the rendered poster rather than checking only the requested delta. Verify every `source -> verb -> target`, including unaffected regions; remove dangling arrows, duplicate edge labels, shifted verbs, missing branches, and false convergence.
 
 ## Common failure modes
 
 - Choosing a familiar layout instead of one that fits the relationships.
+- Treating portrait orientation as part of the style identity when the topology needs landscape.
 - Treating every concept as equally important.
 - Mixing multiple global coordinate systems.
 - Using arrows as decoration rather than actions or relations.
 - Nesting more containers than the hierarchy requires.
 - Writing paragraphs before modeling the structure.
 - Changing the style of a repeated entity without a semantic reason.
+- Repeating parent-poster context at the same visual weight as a zoom-in's owned mechanism.
+- Trusting unaffected connectors after an image edit without re-auditing their source, verb, and target.
 - Mixing incompatible icon families.
 - Copying a brand or existing composition instead of applying the information-design grammar.
 
@@ -531,22 +614,26 @@ Before generation:
 
 - [ ] The subject has a one-sentence takeaway.
 - [ ] The primary diagram type is named.
+- [ ] The orientation follows the relationship topology rather than a fixed format default.
 - [ ] One skeleton controls the poster.
 - [ ] The focal mechanism has the most visual weight.
 - [ ] Repeated entities have canonical labels, colors, and icons.
 - [ ] Every required relationship is written as `source -> verb -> target`.
 - [ ] Exact copy is finalized.
+- [ ] For a series, the poster's unique question and context-only repeated entities are explicit.
 
 Before delivery:
 
 - [ ] The title is readable at thumbnail size.
 - [ ] The reading direction is obvious without reading captions.
 - [ ] No connector crosses a label or terminates ambiguously.
+- [ ] Every `source -> verb -> target` relationship still matches the manifest after the final edit.
+- [ ] No connector is dangling, duplicated, falsely converged, or carrying a shifted edge label.
 - [ ] Solid and dashed lines have consistent meanings.
 - [ ] Large regions use pale fills and focal nodes use stronger fills.
 - [ ] Text remains horizontal, legible, and technically correct.
 - [ ] Equivalent components align across comparisons or small multiples.
+- [ ] In a series or zoom-in, repeated context is visually subordinate to the owned mechanism.
 - [ ] The output or takeaway is visually conclusive.
 - [ ] The poster works in grayscale.
 - [ ] No unauthorized logo, watermark, or copied composition appears.
-
