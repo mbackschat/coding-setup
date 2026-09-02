@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+QUALITY=55
+MAX_DSSIM=0.006
+MAX_BYTES=150000
+
+usage() {
+    printf 'Usage: %s [--force] INPUT.png [OUTPUT.avif]\n' "$(basename "$0")"
+}
+
+fail() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
+
+require_tool() {
+    command -v "$1" >/dev/null 2>&1 || fail "Required tool not found: $1"
+}
+
+force=false
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --force)
+            force=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            usage >&2
+            fail "Unknown option: $1"
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+[[ $# -ge 1 && $# -le 2 ]] || {
+    usage >&2
+    exit 1
+}
+
+input=$1
+[[ -f "$input" ]] || fail "Input PNG not found: $input"
+case "$input" in
+    *.png|*.PNG) ;;
+    *) fail "Input must have a .png extension: $input" ;;
+esac
+
+if [[ $# -eq 2 ]]; then
+    output=$2
+else
+    output="${input%.*}.avif"
+fi
+case "$output" in
+    *.avif|*.AVIF) ;;
+    *) fail "Output must have an .avif extension: $output" ;;
+esac
+
+output_dir=$(dirname "$output")
+[[ -d "$output_dir" ]] || fail "Output directory does not exist: $output_dir"
+[[ "$input" != "$output" ]] || fail "Input and output paths must differ"
+if [[ -e "$output" && "$force" != true ]]; then
+    fail "Output already exists; pass --force to replace it: $output"
+fi
+
+require_tool avifenc
+require_tool avifdec
+require_tool magick
+
+scratch=$(mktemp -d "$output_dir/.png-to-avif.XXXXXX")
+candidate="$scratch/candidate.avif"
+decoded="$scratch/decoded.png"
+encoder_log="$scratch/avifenc.log"
+decoder_log="$scratch/avifdec.log"
+
+cleanup() {
+    rm -f "$candidate" "$decoded" "$encoder_log" "$decoder_log"
+    rmdir "$scratch" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+source_dimensions=$(magick identify -format '%wx%h' "$input")
+[[ -n "$source_dimensions" ]] || fail "Could not read PNG dimensions: $input"
+
+if ! avifenc -q "$QUALITY" -s 0 --yuv 444 --creation-time 0 --modification-time 0 --no-overwrite "$input" "$candidate" >"$encoder_log" 2>&1; then
+    cat "$encoder_log" >&2
+    fail "AVIF encoding failed"
+fi
+
+bytes=$(wc -c < "$candidate" | tr -d '[:space:]')
+((bytes <= MAX_BYTES)) || fail "AVIF output is $bytes bytes, above the $MAX_BYTES-byte ceiling"
+
+if ! avifdec "$candidate" "$decoded" >"$decoder_log" 2>&1; then
+    cat "$decoder_log" >&2
+    fail "AVIF decode verification failed"
+fi
+decoded_dimensions=$(magick identify -format '%wx%h' "$decoded")
+[[ "$decoded_dimensions" == "$source_dimensions" ]] || fail "Dimension verification failed: source $source_dimensions, decoded $decoded_dimensions"
+
+dssim_output=$(LC_ALL=C magick compare -metric DSSIM "$input" "$decoded" null: 2>&1 || true)
+dssim=$(printf '%s' "$dssim_output" | sed -n 's/.*(\([^)]*\)).*/\1/p')
+[[ -n "$dssim" ]] || fail "Could not measure AVIF DSSIM: $dssim_output"
+if ! awk -v dssim="$dssim" -v maximum="$MAX_DSSIM" 'BEGIN { exit (dssim + 0 <= maximum + 0) ? 0 : 1 }'; then
+    fail "AVIF DSSIM is $dssim, above the $MAX_DSSIM ceiling"
+fi
+
+mv -f "$candidate" "$output"
+printf 'Created %s (%s bytes, ceiling %s, DSSIM %s <= %s, %s)\n' "$output" "$bytes" "$MAX_BYTES" "$dssim" "$MAX_DSSIM" "$source_dimensions"

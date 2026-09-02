@@ -1,5 +1,5 @@
 interface:
   display_name: "ByteByteGo-Style Infographics"
-  short_description: "Create clear ByteByteGo-inspired tech infographics"
+  short_description: "Create infographics with optimized AVIF delivery"
   brand_color: "#42D3A4"
-  default_prompt: "Use $infographic-bytebytego-style to create a technical infographic explaining how a request travels through an API gateway."
+  default_prompt: "Use $infographic-bytebytego-style to create a technical infographic explaining how a request travels through an API gateway, then deliver its optimized AVIF sibling."

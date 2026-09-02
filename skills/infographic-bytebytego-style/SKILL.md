@@ -1,6 +1,6 @@
 ---
 name: infographic-bytebytego-style
-description: Create or revise technical infographics with ByteByteGo-inspired information design in portrait or landscape formats, including card catalogs, comparisons, flows, architectures, taxonomies, timelines, and storyboards. Use when the user asks for this infographic style or wants a dense technical subject turned into a clear visual. Do not use for unrelated charts, ordinary diagrams, or copies bearing ByteByteGo branding.
+description: Create or revise technical infographics with ByteByteGo-inspired information design and produce optimized browser-ready AVIF siblings for generated or existing PNGs. Use when the user asks for this infographic style, wants a dense technical subject turned into a clear visual, or asks to convert an existing PNG infographic to AVIF or reduce its browser delivery size. Do not use for unrelated charts, ordinary diagrams, general photo conversion, or copies bearing ByteByteGo branding.
 ---
 
 # ByteByteGo-Style Technical Infographics
@@ -28,8 +28,8 @@ Only `subject` is required. Infer useful defaults for everything else unless an 
 | `theme` | Optional | `auto`, `light`, or `dark`. Default to light. Use dark for a cohesive agent, orchestration, or network map when it materially improves the composition. |
 | `brand` | Optional | User-owned label or supplied logo asset. Default to no brand mark. |
 | `aspect_ratio` | Optional | Default to `auto`: prefer 4:5 portrait for vertical catalogs, stacks and storyboards; 3:2 landscape for left-to-right architectures, multi-lane lifecycles and wide comparisons; use 16:9 when the user needs a slide-native composition. Honor an explicit ratio. |
-| `deliverable` | Optional | Final image, prompt only, design brief, critique, or edit. Infer from the user's verb. |
-| `output` | Optional | Requested filename, format, or location. Return the generated image in conversation when unspecified. |
+| `deliverable` | Optional | Final image, PNG-to-AVIF conversion, prompt only, design brief, critique, or edit. Infer from the user's verb. |
+| `output` | Optional | Requested filename, format, or location. A final PNG also gets an optimized AVIF sibling unless the user explicitly declines it. Conversion-only requests default to the PNG's directory and basename with an `.avif` extension. |
 
 Example minimal invocation:
 
@@ -43,11 +43,18 @@ Example constrained invocation:
 Use $infographic-bytebytego-style to create a dark 4:5 infographic for senior backend engineers. Show ingestion, embedding, indexing, approximate nearest-neighbor search, metadata filtering, reranking, and the final response. Use a layered architecture with numbered request steps. Do not show vendor logos.
 ```
 
+Example conversion invocation:
+
+```text
+Use $infographic-bytebytego-style to convert docs/architecture.png into an optimized browser-ready AVIF without changing its dimensions.
+```
+
 ## Workflow
 
 ### 1. Respect the requested deliverable
 
 - If the user asks for a final infographic, generate or edit the image.
+- If the user supplies an existing PNG and asks only for AVIF conversion or size reduction, skip content analysis, layout work, prompt compilation, and image generation. Run the conversion helper in step 7 directly.
 - If the user asks for a prompt or design brief, return that artifact without generating an image.
 - If the user asks for analysis or critique, inspect and report without changing the image.
 
@@ -115,7 +122,29 @@ Use the available image-generation tool for the final raster image. Supply refer
 
 Do not use the ByteByteGo logo or synthesize a near-copy. If no user brand is supplied, leave the branding area empty and balance the title accordingly.
 
-### 7. Evaluate and iterate
+### 7. Create the AVIF sibling
+
+For every accepted final PNG, run [the PNG-to-AVIF helper](scripts/png-to-avif) unless the user explicitly requests PNG-only output:
+
+```sh
+/path/to/infographic-bytebytego-style/scripts/png-to-avif path/to/infographic.png
+```
+
+The executable can also be called directly for an existing PNG. Its optional second positional argument sets a different AVIF output path. It keeps the PNG untouched and defaults to a same-directory, same-basename `.avif` sibling.
+
+The helper encodes the untouched PNG at its full dimensions with `avifenc` quality 55, speed 0 and YUV444 chroma so colored text edges are not subsampled. It rejects output above the hard 150,000-byte ceiling, decodes the result, verifies its dimensions, and compares it with the source using ImageMagick DSSIM. It fails instead of resizing, exceeding DSSIM 0.006, or weakening the fixed quality settings to meet the size ceiling.
+
+The helper refuses to replace an existing AVIF. Pass `--force` only when the current task regenerated or deliberately replaces the corresponding PNG and the sibling is therefore known to be stale:
+
+```sh
+/path/to/infographic-bytebytego-style/scripts/png-to-avif --force path/to/infographic.png
+```
+
+The helper requires `avifenc`, `avifdec`, and ImageMagick's `magick`. Report a missing dependency instead of installing it without authorization.
+
+Keep the generated PNG as the archival master. Re-encoding does not retain its embedded C2PA Content Credentials manifest; re-sign the AVIF separately when provenance must travel with the derivative.
+
+### 8. Evaluate and iterate
 
 Inspect the result against these gates:
 
@@ -128,13 +157,14 @@ Inspect the result against these gates:
 - No connector crosses text or terminates ambiguously.
 - One layout remains visually dominant.
 - The result contains no unauthorized logo, watermark, or copied composition.
+- The AVIF sibling decodes successfully, preserves the PNG dimensions, has DSSIM no greater than 0.006, and is no larger than 150,000 bytes.
 - After every image edit, re-audit the complete `source -> verb -> target` manifest; layout edits can shift an edge label, drop a branch, or leave a dangling connector outside the edited region.
 - In a series or zoom-in, repeated context remains visually subordinate to the mechanism this poster owns.
 
 If a gate fails, edit the generated image with a focused delta prompt. State what must change and what must remain unchanged. Iterate until the gates pass or a real tool limitation prevents a reliable result.
 
-### 8. Deliver and record
+### 9. Deliver and record
 
-Return the final image with a concise note naming the chosen layout. Mention inferred content or unresolved technical uncertainty only when it matters to the user's use of the result.
+Return the final PNG and AVIF sibling with a concise note naming the chosen layout. For conversion-only requests, return the AVIF with its exact byte size and DSSIM. Mention inferred content, unresolved technical uncertainty, or missing C2PA provenance only when it matters to the user's use of the result.
 
 For an evolving architecture or multi-poster series, maintain an optional regeneration record with three layers: stable communication idea and style; dated current factual input; and generation history containing the compiled prompt, accepted raster, dimensions, and material QA refinements. Do not require this record for a one-off infographic.
