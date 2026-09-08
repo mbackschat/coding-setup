@@ -6,7 +6,7 @@ MAX_DSSIM=0.006
 MAX_BYTES=150000
 
 usage() {
-    printf 'Usage: %s [--force] INPUT.png [OUTPUT.avif]\n' "$(basename "$0")"
+    printf 'Usage: %s [--profile web-compact|poster] [--force] INPUT.png [OUTPUT.avif]\n' "$(basename "$0")"
 }
 
 fail() {
@@ -19,8 +19,18 @@ require_tool() {
 }
 
 force=false
+profile=web-compact
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        --profile)
+            [[ $# -ge 2 ]] || fail "--profile requires web-compact or poster"
+            profile=$2
+            case "$profile" in
+                web-compact|poster) ;;
+                *) fail "Unknown profile: $profile" ;;
+            esac
+            shift 2
+            ;;
         --force)
             force=true
             shift
@@ -97,7 +107,15 @@ if ! avifenc -q "$QUALITY" -s 0 --yuv 444 --creation-time 0 --modification-time 
 fi
 
 bytes=$(wc -c < "$candidate" | tr -d '[:space:]')
-((bytes <= MAX_BYTES)) || fail "AVIF output is $bytes bytes, above the $MAX_BYTES-byte ceiling"
+case "$profile" in
+    web-compact)
+        ((bytes <= MAX_BYTES)) || fail "AVIF output is $bytes bytes, above the $MAX_BYTES-byte ceiling"
+        byte_ceiling=$MAX_BYTES
+        ;;
+    poster)
+        byte_ceiling=none
+        ;;
+esac
 
 if ! avifdec "$candidate" "$decoded" >"$decoder_log" 2>&1; then
     cat "$decoder_log" >&2
@@ -114,4 +132,4 @@ if ! awk -v dssim="$dssim" -v maximum="$MAX_DSSIM" 'BEGIN { exit (dssim + 0 <= m
 fi
 
 mv -f "$candidate" "$output"
-printf 'Created %s (%s bytes, ceiling %s, DSSIM %s <= %s, %s)\n' "$output" "$bytes" "$MAX_BYTES" "$dssim" "$MAX_DSSIM" "$source_dimensions"
+printf 'Created %s (%s bytes, profile %s, ceiling %s, DSSIM %s <= %s, %s)\n' "$output" "$bytes" "$profile" "$byte_ceiling" "$dssim" "$MAX_DSSIM" "$source_dimensions"

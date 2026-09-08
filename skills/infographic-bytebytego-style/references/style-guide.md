@@ -4,6 +4,10 @@
 
 Use this guide to create original technical infographics with a ByteByteGo-inspired visual and information-design grammar. It describes layout selection, composition, visual tokens, mixing rules, and validation. It is not an official brand specification.
 
+## Reading this guide
+
+For a new composition, read the shared grammar through [Information density](#information-density), then only the relevant [diagram pattern](#diagram-patterns). Read [mixing and series guidance](#mixing-diagram-types), a matching [blueprint](#composition-blueprints), or [dark-theme guidance](#light-and-dark-variants) when needed. The content map lives in [the skill workflow](../SKILL.md#1-establish-the-content-map); acceptance criteria live in [the acceptance checklist](quality-checks.md).
+
 ## Core principle
 
 This style is not one diagram template. It is a stable visual grammar applied to the information topology of the subject.
@@ -400,31 +404,6 @@ For a multi-poster series, assign every poster one audience question and one own
 - If two posters explain the same arrows or state transition at equal depth, remove or compress one explanation rather than relying on different titles.
 - Preserve historical or evolving factual detail in a regeneration record rather than duplicating it across poster copy.
 
-## Content architecture
-
-Answer these questions before selecting colors or icons:
-
-| Question | Required answer |
-|---|---|
-| What should a reader understand after 10 seconds? | One sentence. |
-| What is the information shape? | Catalog, comparison, sequence, branching flow, layered system, taxonomy, timeline, or hub. |
-| Which orientation fits that shape? | Portrait for vertical progression; landscape for horizontal comparison, branching, or aligned lanes. |
-| What are the 3 to 7 top-level groups? | Named groups only. |
-| What is the primary reading order? | Top-to-bottom, left-to-right, radial, or indexed. |
-| Which entities repeat? | One canonical label, icon, and color for each. |
-| Which relations require arrows? | Write each as `source -> verb -> target`. |
-| What detail can be removed? | Anything that does not support the takeaway. |
-| What is the focal mechanism? | The region with the most space and strongest color. |
-| If this belongs to a series, what does this poster own? | One unique audience question plus a short list of context-only repeated entities. |
-
-Then build copy in three layers:
-
-1. Headline: the promise or question.
-2. Structural labels: sections, stages, systems, types, and nodes.
-3. Explanatory detail: edge verbs, short captions, examples, and constraints.
-
-Do not begin with prose and shrink it into boxes. Begin with relationships, then write only the labels needed to make those relationships unambiguous.
-
 ## Composition blueprints
 
 ### Multi-panel explainer
@@ -574,66 +553,6 @@ Dark variant rules:
 - Put icons on subtle circular dark-gray backplates when needed.
 - Do not mix dark and light panels unless the contrast has a semantic purpose.
 
-## Quality-control rubric
+## Acceptance
 
-Score each criterion from 0 to 2. A production-ready poster should score at least 17 out of 20, with no zero.
-
-| Criterion | 0 | 1 | 2 |
-|---|---|---|---|
-| Ten-second takeaway | Unclear | Partly visible | Immediately clear |
-| Diagram selection | Mismatched | Usable | Natural fit for the relationships |
-| Reading order | Ambiguous | Mostly clear | Unmistakable |
-| Hierarchy | Flat or chaotic | Some hierarchy | Clear title, section, node, and detail levels |
-| Connector meaning | Random or crossing | Mostly readable | Consistent, labeled, and unambiguous |
-| Semantic consistency | Same entity changes style | Minor drift | Same entity always looks the same |
-| Text economy | Paragraph-heavy | Some excess | Compact and precise |
-| Color discipline | Decorative or overloaded | Mostly controlled | Semantic and restrained |
-| Icon consistency | Mixed visual families | Small inconsistencies | One coherent icon language |
-| Reduced-size legibility | Fails when reduced | Main structure survives | Structure and key labels remain readable |
-
-After any image edit, compare the complete relationship manifest with the rendered poster rather than checking only the requested delta. Verify every `source -> verb -> target`, including unaffected regions; remove dangling arrows, duplicate edge labels, shifted verbs, missing branches, and false convergence.
-
-## Common failure modes
-
-- Choosing a familiar layout instead of one that fits the relationships.
-- Treating portrait orientation as part of the style identity when the topology needs landscape.
-- Treating every concept as equally important.
-- Mixing multiple global coordinate systems.
-- Using arrows as decoration rather than actions or relations.
-- Nesting more containers than the hierarchy requires.
-- Writing paragraphs before modeling the structure.
-- Changing the style of a repeated entity without a semantic reason.
-- Repeating parent-poster context at the same visual weight as a zoom-in's owned mechanism.
-- Trusting unaffected connectors after an image edit without re-auditing their source, verb, and target.
-- Mixing incompatible icon families.
-- Copying a brand or existing composition instead of applying the information-design grammar.
-
-## Final checklist
-
-Before generation:
-
-- [ ] The subject has a one-sentence takeaway.
-- [ ] The primary diagram type is named.
-- [ ] The orientation follows the relationship topology rather than a fixed format default.
-- [ ] One skeleton controls the poster.
-- [ ] The focal mechanism has the most visual weight.
-- [ ] Repeated entities have canonical labels, colors, and icons.
-- [ ] Every required relationship is written as `source -> verb -> target`.
-- [ ] Exact copy is finalized.
-- [ ] For a series, the poster's unique question and context-only repeated entities are explicit.
-
-Before delivery:
-
-- [ ] The title is readable at thumbnail size.
-- [ ] The reading direction is obvious without reading captions.
-- [ ] No connector crosses a label or terminates ambiguously.
-- [ ] Every `source -> verb -> target` relationship still matches the manifest after the final edit.
-- [ ] No connector is dangling, duplicated, falsely converged, or carrying a shifted edge label.
-- [ ] Solid and dashed lines have consistent meanings.
-- [ ] Large regions use pale fills and focal nodes use stronger fills.
-- [ ] Text remains horizontal, legible, and technically correct.
-- [ ] Equivalent components align across comparisons or small multiples.
-- [ ] In a series or zoom-in, repeated context is visually subordinate to the owned mechanism.
-- [ ] The output or takeaway is visually conclusive.
-- [ ] The poster works in grayscale.
-- [ ] No unauthorized logo, watermark, or copied composition appears.
+Use [the acceptance checklist](quality-checks.md) to distinguish hard failures from tolerable style deviations and to audit the rendered result. A prompt prohibition or an overall visual score does not establish compliance.

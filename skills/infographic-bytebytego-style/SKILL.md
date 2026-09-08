@@ -5,166 +5,113 @@ description: Create or revise technical infographics with ByteByteGo-inspired in
 
 # ByteByteGo-Style Technical Infographics
 
-Create original technical infographics that use the visual and information-design grammar associated with ByteByteGo while choosing a layout that fits the subject.
+Create original technical infographics using ByteByteGo-inspired information design. Do not reproduce its logo, wordmark, watermark, or an existing poster. Use a supplied user brand only as authorized.
 
-Do not reproduce the ByteByteGo logo, wordmark, watermark, or an existing poster. Use the user's brand only when they provide a name or asset. Otherwise omit branding.
+## Inputs and routing
 
-## Inputs
+Accept ordinary natural language; only the subject is required. Infer audience, takeaway, title, layout and orientation from the material. Treat supplied facts as the content boundary unless the user requests research.
 
-Accept an ordinary natural-language request. Do not require the user to fill a form or know diagram terminology.
+| Input | Default or contract |
+|---|---|
+| Audience | Software engineers with general technical knowledge, unless the task identifies another audience. |
+| Layout | Select from the reader's question below; use one dominant skeleton. |
+| Theme and brand | Light, no brand mark; use dark only when it suits a cohesive system map. |
+| Aspect ratio | 4:5 for vertical catalogs or stacks; 3:2 for horizontal architectures, comparisons or lifecycles; 16:9 for slide-native output. Honor explicit dimensions. |
+| Required or excluded content | Preserve the user's constraints in the content map and prompt. |
+| Output | Final PNG plus same-directory, same-basename AVIF unless the user declines AVIF. Honor named paths. |
+| Export profile | `web-compact`. Use `poster` only when explicitly selected by the user; a large image alone does not select it. |
+| Regeneration record | Local `INFOGRAPHICS.md` in the project/output root for a series or evolving architecture, unless declined. Honor a named record path; optional for a one-off image. |
 
-Only `subject` is required. Infer useful defaults for everything else unless an ambiguity would materially change the technical meaning.
+- **Final infographic:** follow the workflow below and generate the requested raster.
+- **Conversion only:** run the export helper directly; skip content analysis, image generation and a new regeneration record.
+- **Prompt or design brief:** provide the requested text without generating an image.
+- **Critique:** inspect and report without modifying the image.
 
-| Field | Requirement | Meaning and default |
-|---|---|---|
-| `subject` | Required | The concept, system, process, comparison, or feature set to explain. |
-| `takeaway` | Optional | What the reader should understand in 10 seconds. Infer it from the request. |
-| `facts` or `sources` | Optional | Approved content, notes, links, or files. Treat supplied facts as the content boundary unless the user asks for research. |
-| `audience` | Optional | Reader level and role. Default to software engineers with general technical knowledge. |
-| `title` | Optional | Exact headline. Draft a concise headline when absent. |
-| `must_include` | Optional | Required concepts, entities, steps, comparisons, or labels. |
-| `must_exclude` | Optional | Content or visual elements to omit. |
-| `layout` | Optional | `auto`, `cards`, `small-multiples`, `layered`, `swimlane`, `branching`, `landscape-branching`, `zoom-lifecycle`, `split-comparison`, `hub-and-spoke`, `cheatsheet`, or `storyboard`. Default to `auto`. |
-| `theme` | Optional | `auto`, `light`, or `dark`. Default to light. Use dark for a cohesive agent, orchestration, or network map when it materially improves the composition. |
-| `brand` | Optional | User-owned label or supplied logo asset. Default to no brand mark. |
-| `aspect_ratio` | Optional | Default to `auto`: prefer 4:5 portrait for vertical catalogs, stacks and storyboards; 3:2 landscape for left-to-right architectures, multi-lane lifecycles and wide comparisons; use 16:9 when the user needs a slide-native composition. Honor an explicit ratio. |
-| `deliverable` | Optional | Final image, PNG-to-AVIF conversion, prompt only, design brief, critique, or edit. Infer from the user's verb. |
-| `output` | Optional | Requested filename, format, or location. A final PNG also gets an optimized AVIF sibling unless the user explicitly declines it. Conversion-only requests default to the PNG's directory and basename with an `.avif` extension. |
+## 1. Establish the content map
 
-Example minimal invocation:
+Before choosing colors, record:
 
-```text
-Use $infographic-bytebytego-style to create an infographic explaining how a vector database answers a semantic search query.
-```
+- Audience question and one-sentence takeaway.
+- Exact title, three to seven major groups, reading direction, focal mechanism and output.
+- Exact node text, captions and edge verbs, plus canonical labels, icons and colors for repeated entities.
+- Every meaningful relationship as `source -> verb -> target`; distinguish containment from a directed connection.
+- Claim, source locator, source/as-of date, scope and evidence status for material factual statements.
+- For a series: the question each poster owns and which repeated entities are context only.
 
-Example constrained invocation:
+Use these evidence statuses where applicable:
 
-```text
-Use $infographic-bytebytego-style to create a dark 4:5 infographic for senior backend engineers. Show ingestion, embedding, indexing, approximate nearest-neighbor search, metadata filtering, reranking, and the final response. Use a layered architecture with numbered request steps. Do not show vendor logos.
-```
+| Status | Meaning and presentation |
+|---|---|
+| Documented capability or use | Supported within a stated product, edition, release or deployment scope; preserve any source attribution needed to interpret the claim. |
+| Ongoing | Started but not established as complete; retain this qualifier next to the claim. |
+| Announced or planned | A dated commitment or intention, not delivered availability; retain dates and future wording. |
+| Proposal or assessment | The author's architecture, recommendation or suitability judgment; label it as such. |
+| Illustrative | An invented teaching example, not a real deployment, law or measurement. |
+| Unverified | Insufficient evidence; omit it or show the uncertainty explicitly if it is needed. |
 
-Example conversion invocation:
+Only put material status distinctions on the poster; keep full source locators in the record. Never turn a manufacturer's claim into independent certification or infer general availability from an announcement. If essential facts are missing, resolve them from appropriate primary sources within the user's scope or ask one focused question. The image model must not invent technical facts.
 
-```text
-Use $infographic-bytebytego-style to convert docs/architecture.png into an optimized browser-ready AVIF without changing its dimensions.
-```
-
-## Workflow
-
-### 1. Respect the requested deliverable
-
-- If the user asks for a final infographic, generate or edit the image.
-- If the user supplies an existing PNG and asks only for AVIF conversion or size reduction, skip content analysis, layout work, prompt compilation, and image generation. Run the conversion helper in step 7 directly.
-- If the user asks for a prompt or design brief, return that artifact without generating an image.
-- If the user asks for analysis or critique, inspect and report without changing the image.
-
-### 2. Establish factual content
-
-Extract the entities, groups, relationships, sequence, alternatives, and repeated concepts from the user's material.
-
-Do not ask an image model to invent technical facts. If necessary facts are absent and the subject is current, niche, or ambiguous, research them with appropriate primary sources or ask one focused question when research cannot resolve the intended scope.
-
-Write each important relationship as `source -> verb -> target`. Use this list to prevent decorative or semantically empty arrows.
-
-### 3. Choose the information topology
-
-Choose one primary layout based on the reader's main question:
+## 2. Choose topology and visual grammar
 
 | Reader question | Primary layout |
 |---|---|
 | What concepts or features exist? | Card catalog |
-| How do related variants differ internally? | Comparative small multiples |
+| How do variants differ internally? | Comparative small multiples |
 | How does data move through system layers? | Layered architecture |
 | Who does what, and when? | Swimlane timeline |
 | Which route is selected under each condition? | Branching flow |
-| How do several execution paths relate to one shared contract? | Landscape branching architecture |
+| How do execution paths share one contract? | Landscape branching architecture |
 | How does one component work inside a larger system? | Landscape zoom-in lifecycle |
 | How do two alternatives differ? | Split-screen comparison |
 | What does a central coordinator mediate? | Hub-and-spoke map |
-| What are the main views of this broad topic? | Multi-panel cheatsheet |
+| What are the main views of a broad topic? | Multi-panel cheatsheet |
 | What changes at each fixed stage? | Sequential storyboard |
 
-Use one primary skeleton for at least 70% of the composition. Secondary microdiagrams may appear inside its regions but must not create a competing global reading order.
+Let one skeleton control at least 70% of the composition. Choose orientation from its relationships: four or more comparable horizontal stages or lanes usually need landscape. Recompose when changing orientation; do not rotate or stretch an existing layout.
 
-Choose orientation from that skeleton rather than treating portrait as part of the visual style. Recompose the grid when changing orientation; do not rotate or stretch a portrait layout into landscape. Use landscape when four or more meaningful stages, peers or lanes must remain comparable on one horizontal axis.
+For a new composition, read the shared visual grammar and the matching layout section in [the style guide](references/style-guide.md). Load mixing, series, dark-theme guidance or blueprints only when relevant. A narrow edit can preserve the existing grammar without rereading all layouts.
 
-Read [the style guide](references/style-guide.md) when creating a composition from scratch, selecting or mixing layouts, or correcting a weak composition. For a narrow edit that preserves layout, consult it only when style consistency is relevant.
+## 3. Compile and generate
 
-### 4. Build the content map
+Read [the prompt template](references/prompt-template.md). Fill it from the content map, include only the selected layout instructions, and remove unused placeholders and alternatives. Keep exact visible copy separate from layout directions; preserve evidence qualifiers in the copy.
 
-Before generating, determine:
+Use the available image-generation tool for the final raster. For edits, load the reference through the tool's supported image-input mechanism and state precise changes and invariants. Preserve everything the user did not ask to change.
 
-- One-sentence takeaway.
-- Exact title.
-- Primary reading direction.
-- Three to seven top-level groups.
-- Focal mechanism and final output.
-- Canonical label, icon, and color for every repeated entity.
-- Exact node text, edge verbs, and short captions.
-- Which detail can be removed without weakening the takeaway.
-- For a poster series: the unique audience question, concepts owned by this poster, context-only repeated entities, and an optional zoom source.
+The compiled prompt is internal during generation; include it in the regeneration record when one is required. Do not dump it into chat unless requested.
 
-Prefer structural labels and edge verbs over paragraphs. The final poster must support three reading depths: headline, structure, and detail.
+## 4. Validate the PNG
 
-### 5. Compile the generation prompt
+Use [the acceptance checklist](references/quality-checks.md) as the single acceptance authority. It covers exact text comparison with OCR-assisted review, evidence status, full relationship audits, reduced-size reading, and the distinction between hard failures and tolerable style deviations.
 
-Read [the generation prompt template](references/prompt-template.md), fill it from the content map, and remove all placeholders, alternatives, and unused instructions.
+Correct hard failures with a focused edit prompt, then recheck the complete poster, including unchanged text and connectors. Preserve the accepted PNG as the archival master.
 
-The template is an internal construction tool, not a form the user must complete. Do not show the compiled prompt unless the user asks for it.
+## 5. Export the AVIF sibling
 
-Include finalized copy under `Exact content`. Append the negative constraints to the same image-generation prompt because the image tool accepts one prompt rather than a separate negative-prompt field.
-
-When editing an existing image, preserve everything the user did not ask to change and express the requested differences precisely.
-
-### 6. Generate or edit
-
-Use the available image-generation tool for the final raster image. Supply referenced images through the tool's supported image-input mechanism when editing or when the user provides visual assets.
-
-Do not use the ByteByteGo logo or synthesize a near-copy. If no user brand is supplied, leave the branding area empty and balance the title accordingly.
-
-### 7. Create the AVIF sibling
-
-For every accepted final PNG, run [the PNG-to-AVIF helper](scripts/png-to-avif) unless the user explicitly requests PNG-only output:
+Run [the PNG-to-AVIF helper](scripts/png-to-avif) on each accepted PNG unless the user requests PNG-only:
 
 ```sh
 /path/to/infographic-bytebytego-style/scripts/png-to-avif path/to/infographic.png
 ```
 
-The executable can also be called directly for an existing PNG. Its optional second positional argument sets a different AVIF output path. It keeps the PNG untouched and defaults to a same-directory, same-basename `.avif` sibling.
+| Profile | File-size limit | Shared quality contract |
+|---|---|---|
+| `web-compact` (default) | 150,000 bytes | Unchanged dimensions; quality 55, speed 0, YUV444; successful decode; DSSIM ≤ 0.006. |
+| `poster` (explicit selection) | No byte ceiling | Same quality contract; larger output is allowed, never implicit downscaling. |
 
-The helper encodes the untouched PNG at its full dimensions with `avifenc` quality 55, speed 0 and YUV444 chroma so colored text edges are not subsampled. It rejects output above the hard 150,000-byte ceiling, decodes the result, verifies its dimensions, and compares it with the source using ImageMagick DSSIM. It fails instead of resizing, exceeding DSSIM 0.006, or weakening the fixed quality settings to meet the size ceiling.
-
-The helper refuses to replace an existing AVIF. Pass `--force` only when the current task regenerated or deliberately replaces the corresponding PNG and the sibling is therefore known to be stale:
+For explicitly requested poster export:
 
 ```sh
-/path/to/infographic-bytebytego-style/scripts/png-to-avif --force path/to/infographic.png
+/path/to/infographic-bytebytego-style/scripts/png-to-avif --profile poster path/to/infographic.png
 ```
 
-The helper requires `avifenc`, `avifdec`, and ImageMagick's `magick`. Report a missing dependency instead of installing it without authorization.
+An optional second positional argument sets the output path. Existing AVIFs are protected. Use `--force` only when this task deliberately replaces the corresponding PNG or AVIF and the sibling is known to be stale.
 
-Keep the generated PNG as the archival master. Re-encoding does not retain its embedded C2PA Content Credentials manifest; re-sign the AVIF separately when provenance must travel with the derivative.
+The helper fails rather than weakening the selected profile. Do not silently switch profiles after a failure. Report missing `avifenc`, `avifdec` or ImageMagick `magick` instead of installing dependencies without authorization.
 
-### 8. Evaluate and iterate
+Re-encoding does not retain the PNG's embedded C2PA manifest. Keep the PNG and mention derivative provenance only when relevant to the user's use.
 
-Inspect the result against these gates:
+## 6. Deliver and record
 
-- The takeaway is clear in 10 seconds.
-- The title, major groups, focal path, and output survive thumbnail reduction.
-- The reading order is unmistakable.
-- Every arrow has a clear source, direction, target, and meaning.
-- Repeated entities retain identical labels, icons, and colors.
-- Text is horizontal, legible, and technically correct.
-- No connector crosses text or terminates ambiguously.
-- One layout remains visually dominant.
-- The result contains no unauthorized logo, watermark, or copied composition.
-- The AVIF sibling decodes successfully, preserves the PNG dimensions, has DSSIM no greater than 0.006, and is no larger than 150,000 bytes.
-- After every image edit, re-audit the complete `source -> verb -> target` manifest; layout edits can shift an edge label, drop a branch, or leave a dangling connector outside the edited region.
-- In a series or zoom-in, repeated context remains visually subordinate to the mechanism this poster owns.
+For a series or evolving architecture, create or update the local record using [the regeneration contract](references/regeneration-record.md), unless the user declines it. Preserve existing unrelated entries. A named record requested by the user is required even for a one-off image. Do not publish it as a hosted artifact.
 
-If a gate fails, edit the generated image with a focused delta prompt. State what must change and what must remain unchanged. Iterate until the gates pass or a real tool limitation prevents a reliable result.
-
-### 9. Deliver and record
-
-Return the final PNG and AVIF sibling with a concise note naming the chosen layout. For conversion-only requests, return the AVIF with its exact byte size and DSSIM. Mention inferred content, unresolved technical uncertainty, or missing C2PA provenance only when it matters to the user's use of the result.
-
-For an evolving architecture or multi-poster series, maintain an optional regeneration record with three layers: stable communication idea and style; dated current factual input; and generation history containing the compiled prompt, accepted raster, dimensions, and material QA refinements. Do not require this record for a one-off infographic.
+Return links to the final PNGs, AVIFs and required record, with a concise note about layout and any unresolved limitations. For conversion-only requests, report exact bytes and DSSIM. Never claim checks that were not performed.

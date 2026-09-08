@@ -11,7 +11,7 @@ Use this template only after the content map and primary layout have been select
 5. Append `Avoid` to the same prompt submitted to image generation.
 6. Do not ask the image model to research, infer, or complete technical facts.
 
-The user does not need to see or fill this template unless they requested a prompt-only deliverable.
+The user need not fill this template. Retain the complete submitted prompt in the local record when required by [the regeneration contract](regeneration-record.md).
 
 ## Template
 
@@ -32,6 +32,7 @@ Communication goal:
 Canvas and header:
 - [ASPECT RATIO] [ORIENTATION] composition at high resolution.
 - [LIGHT: very light warm-gray background / DARK: charcoal background].
+- Fully opaque canvas, including header, gutters and footer; use transparency only if the user explicitly requested it.
 - Large bold sans-serif title at the top left.
 - Short mint-green vertical bar immediately left of the title.
 - [NO BRAND: leave the opposite header corner clean / USER BRAND: place the supplied user-owned brand asset in the opposite header corner].
@@ -49,7 +50,11 @@ Primary information structure:
 Exact content:
 - Use these labels exactly as written.
 - Do not add technical claims, labels, products, or steps.
-[FINALIZED NODE LABELS, EDGE VERBS, CAPTIONS, AND OPTIONAL NUMBERED STEPS]
+[FINALIZED NODE LABELS, EDGE VERBS, CAPTIONS, STATUS QUALIFIERS, AS-OF DATES, AND OPTIONAL NUMBERED STEPS]
+
+Evidence constraints:
+- [MATERIAL CLAIM STATUS AND SCOPE TO PRESERVE; OMIT THIS SECTION IF NONE APPLY]
+- Do not turn proposed, illustrative, ongoing or announced content into established capability or completed deployment.
 
 Semantic mapping:
 [ENTITY] = [ICON OR VISUAL METAPHOR] + [COLOR] + [SHAPE]
@@ -77,113 +82,9 @@ Avoid:
 - No tiny paragraphs, illegible text, invented labels, duplicated words, random arrows, unlabeled crossings, ambiguous line endings, excessive nesting, inconsistent icon families, or decorative charts.
 ```
 
-## Layout-specific inserts
+## Layout-specific composition
 
-Use only one primary insert. Rewrite its generic labels into subject-specific directions before generation.
-
-### Card catalog
-
-```text
-- Use a two-column grid for detail-heavy items or a three-column grid for compact items.
-- Give cards equal visual weight.
-- Structure every card as numbered title tab, icon or microdiagram, then one short caption.
-- Do not connect cards with process arrows.
-```
-
-### Comparative small multiples
-
-```text
-- Give each variant its own pastel panel.
-- Repeat the same internal coordinate system in every panel.
-- Keep common components at matching positions and show differences through additions, removals, or changed connections.
-- Allow the most complex variant a larger final panel only when necessary.
-```
-
-### Layered architecture
-
-```text
-- Align the primary data path vertically.
-- Make each major layer a wide labeled container.
-- Expand the focal middle layer to show its internal architecture.
-- Place auxiliary control-plane elements beside, not on, the primary data path.
-- Put consumers, results, or outputs in a conclusive bottom region.
-```
-
-### Swimlane timeline
-
-```text
-- Assign one vertical lane per actor, branch, service, or state.
-- Put lane identities in large cards at the top.
-- Run time from top to bottom.
-- Use colored event circles on lane spines and labeled arrows for creation, merge, return, or handoff.
-```
-
-### Branching flow
-
-```text
-- Place the shared input at the top.
-- Separate routes immediately after the input and label every branch at its origin.
-- Keep alternatives in distinct columns or zones.
-- Converge only where processing is truly shared and end with one explicit output or selected result.
-```
-
-### Landscape branching architecture
-
-```text
-- Use three to five aligned left-to-right columns for inputs, contract or decision point, execution paths, and backends or outputs.
-- Make the shared contract the strongest focal node.
-- Keep alternative paths in aligned lanes and make any shared state converge on one canonical node.
-- Use one shallow full-width footer for evidence, guarantees, or tradeoffs aligned with the paths above.
-- Put optional or future extensions in a small dashed group outside the primary route.
-```
-
-### Landscape zoom-in lifecycle
-
-```text
-- Add one compact breadcrumb naming the parent context and the component being opened.
-- Give the owned mechanism roughly half or more of the body.
-- Keep repeated callers, publication targets, transports, and downstream services in slim context rails or compact groups.
-- Separate synchronous or local work from asynchronous or external work with distinct lanes.
-- End with the component's consequences, state transitions, comparison, or invariants rather than repeating the parent architecture's conclusion.
-```
-
-### Split-screen comparison
-
-```text
-- Divide the body into two equal pale fields.
-- Mirror equivalent vertical levels on both sides.
-- Use the same icon scale and label hierarchy.
-- Align shared comparison dimensions even when internal details differ.
-```
-
-### Hub-and-spoke map
-
-```text
-- Make the coordinator the largest and most saturated central node.
-- Arrange inputs above, capabilities to the sides, workers below, and resources or outputs at the bottom.
-- Group repeated peers in shared bands.
-- Use numbered stages to impose a clear journey on the network.
-```
-
-### Multi-panel cheatsheet
-
-```text
-- Divide the body into two to four major rounded panels.
-- Give each panel an overlapping dark or saturated pill header.
-- Put the simplest definition or overview first.
-- Give the focal mechanism the largest panel.
-- Keep icon, border, color, and arrow grammar consistent across panels.
-```
-
-### Sequential storyboard
-
-```text
-- Stack horizontal stage bands from top to bottom.
-- Put each stage name and symbolic icon in a colored sidebar.
-- Use a neutral field for that stage's mechanics.
-- Carry one numbered route through the bands and show the state passed from one stage to the next.
-- Make the final band a clear user-facing output.
-```
+Read only the selected pattern under [Diagram patterns](style-guide.md#diagram-patterns), plus a matching [blueprint](style-guide.md#composition-blueprints) if useful. Rewrite that pattern for the subject in the template's layout section; do not copy the entire pattern catalog into the prompt.
 
 ## Iteration prompt pattern
 
@@ -206,32 +107,6 @@ Quality gates:
 - No new text, nodes, arrows, logos, or decorative elements.
 ```
 
-## Optional regeneration record
+## Validation and recording
 
-For an evolving architecture or poster series, keep the record outside the image prompt and separate it into three ownership layers:
-
-```markdown
-### Stable idea and visual design
-
-- Audience question
-- Ten-second takeaway
-- Primary topology and orientation
-- Focal mechanism
-- Context-only repeated entities
-- Durable exclusions
-
-### Current factual input — YYYY-MM-DD
-
-- Source links
-- Exact components, artifacts, relationships, guarantees, and current status
-- Facts that are illustrative, future, or explicitly outside the current architecture
-
-### Generation record
-
-- Compiled prompt
-- Accepted raster and dimensions
-- Generation or edit mode
-- Material QA corrections and refinement prompts
-```
-
-Update the narrowest layer that owns a change. Do not rewrite the stable communication goal merely because current architecture details evolved.
+Apply [the acceptance checklist](quality-checks.md) to the rendered image, including all text, evidence qualifiers and relationships after edits. Store the creation and material correction prompts using [the regeneration contract](regeneration-record.md).
