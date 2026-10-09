@@ -7,3 +7,6 @@ __pycache__/
 
 # Packaged skill archives
 skills/*.zip
+
+# Synced skill copies
+skills/synced/
