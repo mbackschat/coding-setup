@@ -61,6 +61,8 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 - P = Problem: I'm reporting a problem (or asking for a fix). Detect the root cause and explain it first — don't just start fixing.
 - F = Fix: I'm asking for a quick fix. Just implement it, unless the scope of changes is unexpected or my input is unclear or misleading. Propose a commit, but don't commit on your own.
 - Re: X >> Y — "regarding your output X, my reply/instruction is Y" (X quotes or references something you said; Y is what I want done about it).
+- When I ask you to mint me a review prompt, then just output this exact prompt, nothing before and after it. And then stop and wait until you get the reply.
+
 
 ## Guidelines for Proposals
 
