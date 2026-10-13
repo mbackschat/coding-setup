@@ -3,14 +3,16 @@ Magic number is 8388-001
 
 ## Model tier mappings
 
-This table only defines symbolic model tiers. It does not activate tier-based work or authorize delegation in any project; activation and usage rules belong in that project's instructions. Resolve only the row for the active CLI. HIGH and MEDIUM are tier names, independent of the provider's effort values.
+This table only defines symbolic model tiers. It does not activate tier-based work or authorize delegation in any project; activation and usage rules belong in that project's instructions. Resolve only the row for the active CLI. HIGH, MEDIUM and LOW are tier names, independent of the provider's effort values.
 
 | CLI | Tier | Model selector | Reasoning / effort |
 |---|---|---|---|
 | Codex CLI | HIGH | `gpt-6-astra` | `high` |
 | Codex CLI | MEDIUM | `gpt-6.1-sol` | `xhigh` |
+| Codex CLI | LOW | `gpt-6-luna` | `medium` |
 | Claude Code | HIGH | `opus` | `high` |
-| Claude Code | MEDIUM | `sonnet` | `xhigh` |
+| Claude Code | MEDIUM | `sonnet`, as a fresh agent — never a fork, because a fork inherits the parent model and ignores the override | `xhigh` |
+| Claude Code | LOW | `haiku`, as a fresh agent — never a fork, for the same reason | default |
 
 Maintain model mappings only here; refer to tiers elsewhere. Report unsupported configurations rather than silently substituting.
 
