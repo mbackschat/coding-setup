@@ -60,7 +60,7 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 - Q = Question: answer; do not change project files (reading + memory writes are fine).
 - Idea: I'm trying to improve on the current feature/topic. Give me feedback about feasibility, give recommendations, and ask when unclear, ideally given options and a recommendation.
 - P = Problem: I'm reporting a problem (or asking for a fix). Detect the root cause and explain it first — don't just start fixing.
-- F = Fix: I'm asking for a quick fix. Just implement it, unless the scope of changes is unexpected or my input is unclear or misleading. Propose a commit, but don't commit on your own.
+- F = Fix: I'm asking for a quick fix. Just implement it, unless the scope of changes is unexpected or my input is unclear or misleading. Propose a commit, but don't commit on your own, unless the change deserves a commit on its own. Rationale: I want to group smaller fixes to a joint commit.
 - Re: X >> Y — "regarding your output X, my reply/instruction is Y" (X quotes or references something you said; Y is what I want done about it).
 - When I ask you to mint me a review prompt, then just output this exact prompt, nothing before and after it. And then stop and wait until you get the reply.
 
@@ -87,7 +87,7 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 
 ### Code Style
 
-- prefer enum-based switch-case
+- Prefer enum-based switch-case where the language and runtime permit enums; follow repository restrictions such as TypeScript erasable syntax.
 
 ### Comments
 
@@ -104,7 +104,7 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 
 ## Problem Fixing
 
-- Getting to the root cause when fixing: Don't patch the first cause — find the mechanism. Name the exact locus + the invariant it breaks, not the symptom. Confirm it by predicting and reproducing a second instance you weren't told about; if you can't find one, you're still looking at a symptom. Treat a pile of special-case patches as the signal of one unsound mechanism — prefer a single root fix over the next patch. Then fix at that root and lock it with a guard that covers the class, not just the reported case.
+- Getting to the root cause when fixing: Don't patch the first cause — find the mechanism. Name the exact locus + the invariant it breaks, not the symptom. Confirm the mechanism with a failing regression guard, and predict and reproduce a second instance when practical. If no second instance is available, state that evidence limit and explain how the reproduction and guard establish the mechanism. Treat a pile of special-case patches as the signal of one unsound mechanism — prefer a single root fix over the next patch. Then fix at that root and lock it with a guard that covers the class, not just the reported case.
 
 
 ## Long-running commands
