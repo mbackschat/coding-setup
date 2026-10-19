@@ -109,6 +109,9 @@ Prefix shortcuts (followed by `:`) I use at the start of a prompt:
 
 ## Long-running commands
 
+- Run a slow test suite or build once with its output saved to a file, and read failures, counts and timings from that file; never re-run it just to get another view of the same result.
+- In Rust projects, keep integration tests as modules of one test binary (`tests/<name>/main.rs`); each top-level `tests/*.rs` file links its own binary, which dominates rebuild time.
+
 For JavaScript/TypeScript projects, also follow [the long-running command policy](~/Projects/coding-setup/instructions/long-running-commands-js-ts.md) before running tests or builds. The path is absolute because a relative one resolves against the project you are working in, not against this file.
 
 ## Shareable Memory
